@@ -1,4 +1,5 @@
 import requests
+from .producer import send_data_to_kafka
 
 
 def fetch_github_commits(repo_owner: str, repo_name: str, access_token: str):
@@ -40,7 +41,8 @@ def fetch_github_commits(repo_owner: str, repo_name: str, access_token: str):
                 "author": author,
                 "date": date
             }
-            return commit_data
+            # отправляем коммит в топик кафка
+            send_data_to_kafka(commit_data)
     else:
         print("Не удалось получить данные")
         return None
