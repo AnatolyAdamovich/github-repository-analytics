@@ -1,15 +1,27 @@
 {
-    "name": "inventory-connector", 
+    "name": "postgres-connector", 
     "config": {
         "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+        
         "database.hostname": "postgres",
         "database.port": "5432", 
-        "database.user": "postgres", 
-        "database.password": "postgres", 
+        "database.user": "postgres",
+        "database.password": "postgres",
         "database.dbname": "github-processing-project", 
         "database.server.name": "postgres", 
+
         "plugin.name": "pgoutput", 
-        "topic.prefix": "github", 
-        "publication.name": "cdc_publication"
+        "tasks.max": "1",
+        "topic.prefix": "postgres", 
+        "publication.name": "github_users_publication",
+        "table.whitelist": "public.github_users",
+        
+        "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter.schemas.enable": "false",
+        "key.converter.schemas.enable": "false",        
+        "transforms": "flatten", 
+        "transforms.flatten.type": "org.apache.kafka.connect.transforms.Flatten$Value",
+        "transforms.flatten.delimiter": "."
     }
 }
