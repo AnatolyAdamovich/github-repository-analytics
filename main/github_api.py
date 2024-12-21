@@ -1,6 +1,4 @@
 import requests
-from .producer import send_data_to_kafka
-
 
 def fetch_github_commits(repo_owner: str, repo_name: str, access_token: str):
     '''
@@ -26,23 +24,7 @@ def fetch_github_commits(repo_owner: str, repo_name: str, access_token: str):
     
     if response.status_code == 200:
         commits = response.json()
-        
-        # извлечение информации о коммитах
-        for commit in commits:
-            
-            sha = commit["sha"]
-            message = commit["commit"]["message"]
-            author = commit["commit"]["author"]["name"]
-            date = commit["commit"]["author"]["date"]
-
-            commit_data = {
-                "sha": sha,
-                "message": message,
-                "author": author,
-                "date": date
-            }
-            # отправляем коммит в топик кафка
-            send_data_to_kafka(commit_data)
+        return commits
     else:
         print("Не удалось получить данные")
         return None
